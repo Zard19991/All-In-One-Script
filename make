@@ -1,6 +1,8 @@
 #!/bin/bash
-# Docker / LianHuanHua / HAProxy / Rclone / Alist / Calibre / FFmpeg / Nginx / Openresty / V2ray / Xray / Cloudflare / IBM Cloud Foundry / Armbian / Proxmox VE / ...
-# Copyright (C) 2019-2024
+# Docker / HAProxy / Rclone / Alist / Calibre / FFmpeg / 
+# Nginx / Openresty / V2ray / Xray / Armbian / PVE / 
+# Samba / LianHuanHua / ...
+# Copyright (C) 2019-2025
 # Released under GPL Version 3 License
 
 set -euo pipefail

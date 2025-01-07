@@ -135,10 +135,13 @@ CALIBRE_ROOT="$SERVICES_ROOT"/calibre
 KCC_ROOT="$CALIBRE_ROOT"/kcc
 KCC_FILE="$KCC_ROOT"/kcc-c2e.py
 
-# docker
+# Docker
 DOCKER_FILE="$AIOS_PREFIX"/bin/dr
 DOCKER_ROOT="$SERVICES_ROOT"/docker
 DOCKER_CONFIG="$SERVICES_ROOT"/docker/docker-compose.yml
 
 # HAProxy
 HAPROXY_FILE="$AIOS_PREFIX"/bin/ha
+
+# Iperf3
+IPERF3_FILE="$AIOS_PREFIX"/bin/iperf3

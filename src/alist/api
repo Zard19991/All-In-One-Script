@@ -13,8 +13,8 @@ Alist.auth.login()
     -H "Content-Type: application/json" \
     -H "User-Agent: $USER_AGENT_BROWSER" \
     --data "$alist_payload" \
-    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" '(if (.|type == "string") then {} else . end) as $response |
-    ($response.data | if (.|type == "string") then {} else . end) as $data |
+    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" 'if type == "object" then . else {} end | . as $response |
+    ($response.data | if type == "object" then . else {} end) as $data |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + $delimiter]
@@ -47,8 +47,8 @@ Alist.me()
     -H "Content-Type: application/json" \
     -H "User-Agent: $USER_AGENT_BROWSER" \
     -H "Authorization: $alist_acc_token" \
-    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" '(if (.|type == "string") then {} else . end) as $response |
-    ($response.data | if (.|type == "string") then {} else . end) as $data |
+    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" 'if type == "object" then . else {} end | . as $response |
+    ($response.data | if type == "object" then . else {} end) as $data |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + $delimiter]
@@ -74,8 +74,8 @@ Alist.fs.get()
     -H "User-Agent: $USER_AGENT_BROWSER" \
     -H "Authorization: $alist_acc_token" \
     --data '{"path":"/","password":""}' \
-    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" '(if (.|type == "string") then {} else . end) as $response |
-    ($response.data | if (.|type == "string") then {} else . end) as $data |
+    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" 'if type == "object" then . else {} end | . as $response |
+    ($response.data | if type == "object" then . else {} end) as $data |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + $delimiter]
@@ -104,8 +104,8 @@ Alist.public.settings()
     -H "Content-Type: application/json" \
     -H "User-Agent: $USER_AGENT_BROWSER" \
     -H "Authorization: $alist_acc_token" \
-    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" '(if (.|type == "string") then {} else . end) as $response |
-    ($response.data | if (.|type == "string") then {} else . end) as $data |
+    | $JQ_FILE -r --arg delimiter "${delimiters[0]}" 'if type == "object" then . else {} end | . as $response |
+    ($response.data | if type == "object" then . else {} end) as $data |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + $delimiter]
@@ -151,9 +151,10 @@ Alist.fs.list()
     IFS=$'\003\t' read -r fs_list_code fs_list_message total readme write provider \
     content_name content_size content_is_dir content_modified content_sign content_thumb \
     content_type < <(JQs flat "$response" '' '
-    (if (.|type == "string") then {} else . end) as $response |
-    ($response.data | if (.|type == "string") then {} else . end) as $data |
-    ($data.content // "" | if (.|type == "string") then {} else . end) as $content |
+    if type == "object" then . else {} end |
+    . as $response |
+    ($response.data | if type == "object" then . else {} end) as $data |
+    ($data.content | if type == "object" then . else {} end) as $content |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + "\u0003"]
@@ -201,7 +202,8 @@ Alist.fs.rename()
     )
 
     IFS=$'\002\t' read -r fs_rename_code fs_rename_message < <(JQs flat "$response" '' '
-    (if (.|type == "string") then {} else . end) as $response |
+    if type == "object" then . else {} end |
+    . as $response |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + "\u0002"]
@@ -239,7 +241,8 @@ Alist.fs.remove()
     )
 
     IFS=$'\002\t' read -r fs_remove_code fs_remove_message < <(JQs flat "$response" '' '
-    (if (.|type == "string") then {} else . end) as $response |
+    if type == "object" then . else {} end |
+    . as $response |
     reduce ({code,message}|keys_unsorted[]) as $key ([];
         $response[$key] as $val | ($val | type) as $type | if $val or ($type == "boolean") then
             . + [($val|tostring) + "\u0002"]

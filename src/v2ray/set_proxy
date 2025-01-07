@@ -1,0 +1,363 @@
+V2raySetVliteuHandshakeMaskingPaddingSizeValidator()
+{
+    if [ "$1" == "0" ] || [[ "$1" =~ ^[1-9][0-9]*$ ]]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetHttpPortValidator()
+{
+    if [[ "$1" =~ ^[1-9][0-9]*$ ]] && [ "$1" -le 65535 ]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetSocksPortValidator()
+{
+    if [[ "$1" =~ ^[1-9][0-9]*$ ]] && [ "$1" -le 65535 ]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetShadowsocksPortValidator()
+{
+    if [[ "$1" =~ ^[1-9][0-9]*$ ]] && [ "$1" -le 65535 ]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetDokodemoPortValidator()
+{
+    if [[ "$1" =~ ^[1-9][0-9]*$ ]] && [ "$1" -le 65535 ]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetTrojanPortValidator()
+{
+    if [[ "$1" =~ ^[1-9][0-9]*$ ]] && [ "$1" -le 65535 ]
+    then
+        return 0
+    fi
+
+    return 1
+}
+
+V2raySetProxyInbound()
+{
+    echo
+    inbound_proxy_protocols=( 
+        vmess
+        vless
+        vliteu
+        http
+        socks
+        shadowsocks
+        dokodemo-door
+        trojan
+    )
+    inbound_proxy_protocol_options=(
+        VMess
+        VLESS
+        VLite
+        HTTP
+        SOCKS
+        Shadowsocks
+        Dokodemo
+        Trojan
+    )
+    inquirer list_input_index "选择入站代理协议" inbound_proxy_protocol_options inbound_proxy_protocols_index
+    inbound_proxy_protocol="${inbound_proxy_protocols[$inbound_proxy_protocols_index]}"
+}
+
+V2raySetVmessUsers()
+{
+    Println "$tip 必须为合法的 UUID, 多个 UUID 用空格分隔"
+    inquirer text_input "vmess 输入用户 ID: " vmess_users "$i18n_blank"
+    vmess_users=$(StringToList vmess_users)
+}
+
+V2raySetVmessAddress()
+{
+    Println "$tip 支持 IP 地址或者域名"
+    inquirer text_input "vmess 输入服务器地址: " vmess_address "$i18n_blank"
+}
+
+V2raySetVmessPort()
+{
+    echo
+    inquirer text_input "vmess 输入服务器端口号: " vmess_port "$i18n_blank"
+}
+
+V2raySetVmessUuid()
+{
+    Println "$tip 必须为合法的 UUID"
+    inquirer text_input "vmess 输入目标服务器用户 ID: " vmess_uuid "$i18n_blank"
+}
+
+V2raySetVlessUsers()
+{
+    Println "$tip 必须为合法的 UUID, 多个 UUID 用空格分隔"
+    inquirer text_input "vless 输入用户 ID: " vless_users "$i18n_blank"
+    vless_users=$(StringToList vless_users)
+}
+
+V2raySetVlessAddress()
+{
+    Println "$tip 支持 IP 地址或者域名"
+    inquirer text_input "vless 输入服务器地址: " vless_address "$i18n_blank"
+}
+
+V2raySetVlessPort()
+{
+    echo
+    inquirer text_input "vless 输入服务器端口号: " vless_port "$i18n_blank"
+}
+
+V2raySetVlessUuid()
+{
+    Println "$tip 必须为合法的 UUID"
+    inquirer text_input "vless 输入目标服务器用户 ID: " vless_uuid "$i18n_blank"
+}
+
+V2raySetVliteuAddress()
+{
+    Println "$tip 支持 IP 地址或者域名"
+    inquirer text_input "vliteu 输入服务器地址: " vliteu_address "$i18n_blank"
+}
+
+V2raySetVliteuPort()
+{
+    echo
+    inquirer text_input "vliteu 输入服务器端口号: " vliteu_port "$i18n_blank"
+}
+
+V2raySetVliteuPassword()
+{
+    echo
+    inquirer text_input "vliteu 输入目标服务器密码: " vliteu_password "$i18n_blank"
+}
+
+V2raySetVliteuScramblePacket()
+{
+    echo
+    inquirer list_input_yn "vliteu 启用数据包混淆" tf_options vliteu_scramble_packet
+}
+
+V2raySetVliteuEnableFec()
+{
+    echo
+    inquirer list_input_yn "vliteu 启用前向纠错" tf_options vliteu_enable_fec
+}
+
+V2raySetVliteuEnableStabilization()
+{
+    echo
+    inquirer list_input_yn "vliteu 启用通用连接稳定机制" tf_options vliteu_enable_stabilization
+}
+
+V2raySetVliteuEnableRenegotiation()
+{
+    echo
+    inquirer list_input_yn "vliteu 启用通用连接稳定重协议协商机制" tf_options vliteu_enable_renegotiation
+}
+
+V2raySetVliteuHandshakeMaskingPaddingSize()
+{
+    echo
+    inquirer text_input "vliteu 输入握手数据包填充至的长度: " vliteu_handshake_masking_padding_size 0 V2raySetVliteuHandshakeMaskingPaddingSizeValidator
+}
+
+V2raySetHttpAddress()
+{
+    echo
+    inquirer text_input "http 输入服务器地址: " http_address "$i18n_blank"
+}
+
+V2raySetHttpPort()
+{
+    echo
+    inquirer text_input "http 输入服务器端口号: " http_port 80 V2raySetHttpPortValidator
+}
+
+V2raySetHttpH1SkipWaitForReply()
+{
+    echo
+    inquirer list_input_ny "http 在服务器回复前发送连接数据" ft_options http_h1_skip_wait_for_reply
+}
+
+V2raySetSocksAddressInbound()
+{
+    echo
+    inquirer text_input "socks 指定客户端发包的目标地址: " socks_address_inbound "$i18n_blank"
+}
+
+V2raySetSocksUdpEnabled()
+{
+    echo
+    inquirer list_input_ny "socks 启用 UDP 支持" ft_options socks_udp_enabled
+}
+
+V2raySetSocksPacketEncoding()
+{
+    echo
+    socks_packet_encoding_options=(
+        None
+        Packet
+    )
+    inquirer list_input "socks UDP包编码方式" socks_packet_encoding_options socks_packet_encoding
+}
+
+V2raySetSocksAddressOutbound()
+{
+    Println "$tip 仅支持连接到 Socks 5 服务器"
+    inquirer text_input "socks 服务器地址: " socks_address_outbound "$i18n_blank"
+}
+
+V2raySetSocksPort()
+{
+    echo
+    inquirer text_input "socks 服务器端口号: " socks_port 1080 V2raySetSocksPortValidator
+}
+
+V2raySetShadowsocksMethod()
+{
+    Println "$tip none 不加密方式下，服务器端不会验证密码"
+    shadowsocks_method_options=(
+        aes-256-gcm
+        aes-128-gcm
+        chacha20-poly1305
+        none
+    )
+    inquirer list_input "shadowsocks 加密方式" shadowsocks_method_options shadowsocks_method
+}
+
+V2raySetShadowsocksPasswordInbound()
+{
+    Println "$tip 建议使用 16 字符或更长的密码"
+    inquirer text_input "shadowsocks 密码: " shadowsocks_password "$i18n_random"
+
+    if [ "$shadowsocks_password" == "$i18n_random" ] 
+    then
+        shadowsocks_password=$(RandStr 16)
+        Println "  shadowsocks 密码: ${green}$shadowsocks_password${normal}"
+    fi
+}
+
+V2raySetShadowsocksNetworks()
+{
+    echo
+    shadowsocks_networks_options=(
+        tcp
+        udp
+        tcp,udp
+    )
+    inquirer list_input "shadowsocks 传输协议" shadowsocks_networks_options shadowsocks_networks
+}
+
+V2raySetShadowsocksPacketEncoding()
+{
+    echo
+    shadowsocks_packet_encoding_options=(
+        None
+        Packet
+    )
+    inquirer list_input "shadowsocks UDP包编码方式" shadowsocks_packet_encoding_options shadowsocks_packet_encoding
+}
+
+V2raySetShadowsocksAddress()
+{
+    Println "$tip 支持 IP 地址或者域名"
+    inquirer text_input "shadowsocks 服务器地址: " shadowsocks_address "$i18n_blank"
+}
+
+V2raySetShadowsocksPort()
+{
+    echo
+    inquirer text_input "shadowsocks 服务器端口号: " shadowsocks_port 1080 V2raySetShadowsocksPortValidator
+}
+
+V2raySetShadowsocksPasswordOutbound()
+{
+    echo
+    inquirer text_input "shadowsocks 服务器密码: " shadowsocks_password "$i18n_blank"
+}
+
+V2raySetDokodemoAddress()
+{
+    Println "$tip 支持 IP 地址或者域名, followRedirect 为 true 时此项可为空"
+    inquirer text_input "dokodemo-door 将流量转发到此地址: " dokodemo_address "$i18n_blank"
+}
+
+V2raySetDokodemoPort()
+{
+    echo
+    inquirer text_input "dokodemo-door 将流量转发到目标地址的指定端口: " dokodemo_port 1080 V2raySetDokodemoPortValidator
+}
+
+V2raySetDokodemoNetworks()
+{
+    echo
+    dokodemo_networks_options=(
+        tcp
+        udp
+        tcp,udp
+    )
+    inquirer list_input "dokodemo-door 可接收的网络协议类型" dokodemo_networks_options dokodemo_networks
+}
+
+V2raySetDokodemoFollowRedirect()
+{
+    echo
+    inquirer list_input_ny "dokodemo-door 识别 iptables 转发来的数据，并转发到相应的目标地址" ft_options dokodemo_follow_redirect
+}
+
+V2raySetTrojanUsers()
+{
+    Println "$tip 多个密码用空格分隔"
+    inquirer text_input "trojan 输入用户密码: " trojan_users "$i18n_blank"
+    trojan_users=$(StringToList trojan_users)
+}
+
+V2raySetTrojanPacketEncoding()
+{
+    echo
+    trojan_packet_encoding_options=(
+        None
+        Packet
+    )
+    inquirer list_input "trojan UDP包编码方式" trojan_packet_encoding_options trojan_packet_encoding
+}
+
+V2raySetTrojanAddress()
+{
+    Println "$tip 支持 IP 地址或者域名"
+    inquirer text_input "trojan 服务器地址: " trojan_address "$i18n_blank"
+}
+
+V2raySetTrojanPort()
+{
+    echo
+    inquirer text_input "trojan 服务器端口号: " trojan_port 443 V2raySetTrojanPortValidator
+}
+
+V2raySetTrojanPassword()
+{
+    echo
+    inquirer text_input "trojan 服务器用户的密码: " trojan_password "$i18n_blank"
+}

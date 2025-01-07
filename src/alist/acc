@@ -48,11 +48,6 @@ AlistAccAdd()
         echo
         inquirer text_input "输入密码" alist_acc_password "$i18n_blank"
 
-        if [ "$alist_acc_password" == "$i18n_blank" ] 
-        then
-            alist_acc_password=""
-        fi
-
         new_acc=$(
         $JQ_FILE -n --arg username "$alist_acc_username" --arg password "$alist_acc_password" \
             '{
